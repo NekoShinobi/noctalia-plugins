@@ -54,6 +54,8 @@ Open the plugin settings to customize:
 
 ### Panel
 - View the complete list of packages with current and new versions
+- Repository badges show package source (core, extra, community, aur, etc.)
+- AUR packages are highlighted with a different color
 - Click "Update Now" to run `yay -Syu` in your configured terminal
 - Click "Refresh" to manually check for updates
 
@@ -76,10 +78,14 @@ qs -c noctalia-shell ipc call plugin:yay-updater update
 
 ## Technical Details
 
-- Runs `yay -Qu` to get the list of available updates
-- Parses package names and version information
+- Syncs package database with `yay -Sy` before checking
+- Runs `yay -Qu` to get all available updates (official repos + AUR)
+- Queries each package to determine its repository (core, extra, community, multilib, aur, etc.)
+- Parses package names, repository info, and version information
 - Opens your configured terminal with `yay -Syu` for system updates
 - Automatically refreshes the package list after updates complete
+
+**Note:** The plugin syncs the package database and queries repository information during each check, which ensures accurate results but may take a few seconds depending on your mirror speed and number of updates.
 
 ## License
 

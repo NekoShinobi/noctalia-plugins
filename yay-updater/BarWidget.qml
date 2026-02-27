@@ -25,11 +25,11 @@ Item {
 
   property string iconName: pluginApi?.pluginSettings?.iconName || pluginApi?.manifest?.metadata?.defaultSettings?.iconName || "software-update-available"
   property bool hideOnZero: pluginApi?.pluginSettings.hideOnZero || pluginApi?.manifest?.metadata.defaultSettings?.hideOnZero || false
-  
+
   readonly property int updateCount: root.pluginApi?.mainInstance?.updateCount || 0
   readonly property bool isChecking: root.pluginApi?.mainInstance?.isChecking || false
   readonly property bool isVisible: (updateCount > 0) || !hideOnZero
-  
+
   visible: isVisible
   opacity: isVisible ? 1.0 : 0.0
 
@@ -70,7 +70,7 @@ Item {
           Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
           icon: root.isChecking ? "loader" : root.iconName
           color: root.hovered ? Color.mOnHover : (root.updateCount > 0 ? Color.mPrimary : Color.mOnSurface)
-          
+
           RotationAnimation on rotation {
             running: root.isChecking
             from: 0
@@ -119,7 +119,7 @@ Item {
 
     function buildTooltip() {
       const lines = [];
-      
+
       if (root.isChecking) {
         lines.push("Checking for updates...");
       } else if (root.updateCount > 0) {
@@ -127,12 +127,12 @@ Item {
       } else {
         lines.push("System is up to date");
       }
-      
+
       const lastCheck = root.pluginApi?.mainInstance?.lastCheckTime;
       if (lastCheck) {
         lines.push(`Last checked: ${lastCheck}`);
       }
-      
+
       lines.push("\nLeft click: View details");
       lines.push("Right click: Menu");
 
@@ -165,7 +165,7 @@ Item {
     onTriggered: function (action) {
       contextMenu.close();
       PanelService.closeContextMenu(screen);
-      
+
       if (action === "refresh") {
         if (root.pluginApi?.mainInstance) {
           root.pluginApi.mainInstance.startCheckUpdates();

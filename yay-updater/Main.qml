@@ -44,30 +44,51 @@ Item {
 
   Process {
     id: checkUpdatesProc
-    command: ["sh", "-c", "yay -Qu 2>/dev/null"]
+    command: ["sh", "-c", `
+      yay -Sy --quiet >/dev/null 2>&1
+      yay -Qu 2>/dev/null | while IFS= read -r line; do
+        pkg=$(echo "$line" | awk '{print $1}')
+        if pacman -Si "$pkg" >/dev/null 2>&1; then
+          repo=$(pacman -Si "$pkg" 2>/dev/null | awk '/^Repository/{print $3}')
+          echo "$repo/$line"
+        else
+          echo "aur/$line"
+        fi
+      done
+    `]
 
     stdout: StdioCollector {
       onStreamFinished: {
         const output = text.trim();
-        
+
         if (output === "") {
           root.updateCount = 0;
           root.packageList = [];
           Logger.i("YayUpdater", "No updates available");
         } else {
           const lines = output.split('\n').filter(line => line.trim() !== "");
-          root.packageList = lines.map(line => {
+          const packages = lines.map(line => {
             const parts = line.split(/\s+/);
+            const fullName = parts[0] || "";
+            const repoMatch = fullName.match(/^([^\/]+)\/(.*)/);
+
             return {
-              name: parts[0] || "",
+              repository: repoMatch ? repoMatch[1] : "unknown",
+              name: repoMatch ? repoMatch[2] : fullName,
+              fullName: fullName,
               currentVersion: parts[1] || "",
               newVersion: parts[3] || parts[2] || ""
             };
           });
+
+          // Sort packages alphabetically by name
+          packages.sort((a, b) => a.name.localeCompare(b.name));
+
+          root.packageList = packages;
           root.updateCount = root.packageList.length;
-          Logger.i("YayUpdater", `Found ${root.updateCount} updates`);
+          Logger.i("YayUpdater", `Found ${root.updateCount} updates (repos + AUR)`);
         }
-        
+
         root.lastCheckTime = new Date().toLocaleTimeString();
         root.isChecking = false;
       }
@@ -87,12 +108,12 @@ Item {
   function runSystemUpdate() {
     const updateCmd = "yay -Syu";
     const term = root.terminalCommand.trim();
-    const fullCmd = (term.indexOf("{}") !== -1) 
-      ? term.replace("{}", updateCmd) 
+    const fullCmd = (term.indexOf("{}") !== -1)
+      ? term.replace("{}", updateCmd)
       : term + " " + updateCmd;
 
     Logger.i("YayUpdater", `Running update command: ${fullCmd}`);
-    
+
     systemUpdateProc.command = ["sh", "-c", fullCmd];
     systemUpdateProc.running = true;
   }

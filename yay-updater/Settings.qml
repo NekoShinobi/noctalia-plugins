@@ -38,6 +38,7 @@ ColumnLayout {
     checked: root.hideOnZero
     onToggled: function (checked) {
       root.hideOnZero = checked;
+      root.saveSettings();
     }
   }
 
@@ -48,6 +49,7 @@ ColumnLayout {
     checked: root.autoRefreshOnOpen
     onToggled: function (checked) {
       root.autoRefreshOnOpen = checked;
+      root.saveSettings();
     }
   }
 
@@ -98,6 +100,7 @@ ColumnLayout {
       id: changeIcon
       onIconSelected: function (icon) {
         root.iconName = icon;
+        root.saveSettings();
       }
     }
   }
@@ -145,6 +148,7 @@ ColumnLayout {
       stepSize: 1
       onValueChanged: {
         root.updateIntervalHours = value;
+        root.saveSettings();
       }
     }
   }
@@ -179,6 +183,7 @@ ColumnLayout {
       text: root.terminalCommand
       onTextChanged: {
         root.terminalCommand = text;
+        root.saveSettings();
       }
     }
 
@@ -230,5 +235,22 @@ ColumnLayout {
         }
       }
     }
+  }
+
+  function saveSettings() {
+    if (!pluginApi) {
+      Logger.e("YayUpdater", "Cannot save settings: pluginApi is null");
+      return;
+    }
+
+    pluginApi.pluginSettings.updateIntervalHours = root.updateIntervalHours;
+    pluginApi.pluginSettings.terminalCommand = root.terminalCommand;
+    pluginApi.pluginSettings.iconName = root.iconName;
+    pluginApi.pluginSettings.hideOnZero = root.hideOnZero;
+    pluginApi.pluginSettings.autoRefreshOnOpen = root.autoRefreshOnOpen;
+
+    pluginApi.saveSettings();
+
+    Logger.i("YayUpdater", "Settings saved successfully");
   }
 }

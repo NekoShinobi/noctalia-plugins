@@ -14,7 +14,7 @@ Item {
   property real contentPreferredWidth: 420 * Style.uiScaleRatio
   property real contentPreferredHeight: 520 * Style.uiScaleRatio
   readonly property bool allowAttach: true
-  
+
   readonly property int updateCount: mainInstance?.updateCount || 0
   readonly property var packageList: mainInstance?.packageList || []
   readonly property bool isChecking: mainInstance?.isChecking || false
@@ -107,9 +107,9 @@ Item {
               spacing: 2
 
               NText {
-                text: root.isChecking 
-                  ? "Checking for updates..." 
-                  : (root.updateCount > 0 
+                text: root.isChecking
+                  ? "Checking for updates..."
+                  : (root.updateCount > 0
                     ? `${root.updateCount} update${root.updateCount !== 1 ? 's' : ''} available`
                     : "System is up to date")
                 font.pointSize: Style.fontSizeM * Style.uiScaleRatio
@@ -191,13 +191,35 @@ Item {
                 leftMargin: Style.marginM
                 rightMargin: Style.marginM
               }
-              spacing: 2
+              spacing: 4
 
-              NText {
-                text: modelData.name
-                font.pointSize: Style.fontSizeM * Style.uiScaleRatio
-                font.weight: Font.DemiBold
-                color: Color.mOnSurface
+              RowLayout {
+                spacing: Style.marginS
+
+                Rectangle {
+                  Layout.preferredWidth: repoText.implicitWidth + Style.marginS * 2
+                  Layout.preferredHeight: repoText.implicitHeight + 4
+                  color: modelData.repository === "aur" ? Color.mSecondary : Color.mPrimary
+                  radius: Style.radiusS
+                  opacity: 0.2
+
+                  NText {
+                    id: repoText
+                    anchors.centerIn: parent
+                    text: modelData.repository || "unknown"
+                    font.pointSize: Style.fontSizeXS * Style.uiScaleRatio
+                    font.weight: Font.Bold
+                    color: modelData.repository === "aur" ? Color.mSecondary : Color.mPrimary
+                  }
+                }
+
+                NText {
+                  text: modelData.name
+                  font.pointSize: Style.fontSizeM * Style.uiScaleRatio
+                  font.weight: Font.DemiBold
+                  color: Color.mOnSurface
+                  Layout.fillWidth: true
+                }
               }
 
               RowLayout {
