@@ -9,11 +9,14 @@ ColumnLayout {
 
   property var pluginApi: null
 
-  property int updateIntervalHours: pluginApi?.pluginSettings?.updateIntervalHours || pluginApi?.manifest?.metadata?.defaultSettings?.updateIntervalHours || 4
-  property string terminalCommand: pluginApi?.pluginSettings?.terminalCommand || pluginApi?.manifest?.metadata.defaultSettings?.terminalCommand || "foot -e"
-  property string iconName: pluginApi?.pluginSettings?.iconName || pluginApi?.manifest?.metadata?.defaultSettings?.iconName || "software-update-available"
-  property bool hideOnZero: pluginApi?.pluginSettings?.hideOnZero || pluginApi?.manifest?.metadata?.defaultSettings?.hideOnZero || false
-  property bool autoRefreshOnOpen: pluginApi?.pluginSettings?.autoRefreshOnOpen ?? pluginApi?.manifest?.metadata?.defaultSettings?.autoRefreshOnOpen ?? true
+  property var cfg: pluginApi?.pluginSettings || ({})
+  property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+
+  property int updateIntervalHours: cfg.updateIntervalHours ?? defaults.updateIntervalHours ?? 4
+  property string terminalCommand: cfg.terminalCommand ?? defaults.terminalCommand ?? "foot -e"
+  property string iconName: cfg.iconName ?? defaults.iconName ?? "software-update-available"
+  property bool hideOnZero: cfg.hideOnZero ?? defaults.hideOnZero ?? false
+  property bool autoRefreshOnOpen: cfg.autoRefreshOnOpen ?? defaults.autoRefreshOnOpen ?? true
 
   spacing: Style.marginL
 
@@ -148,7 +151,11 @@ ColumnLayout {
       stepSize: 1
       onValueChanged: {
         root.updateIntervalHours = value;
-        root.saveSettings();
+      }
+      onPressedChanged: {
+        if (!pressed) {
+          root.saveSettings();
+        }
       }
     }
   }
@@ -183,6 +190,8 @@ ColumnLayout {
       text: root.terminalCommand
       onTextChanged: {
         root.terminalCommand = text;
+      }
+      onEditingFinished: {
         root.saveSettings();
       }
     }

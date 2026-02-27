@@ -9,7 +9,7 @@ This is a personal collection of custom plugins for Noctalia Shell. These plugin
 ## Available Plugins
 
 ### Yay Updater
-**Version:** 1.3.4  
+**Version:** 1.3.6  
 - Automatic update checks every 4 hours (configurable 1-24 hours)
 - Visual update count on bar widget
 - Detailed package list with version information

@@ -18,6 +18,7 @@ Item {
   property var packageList: []
   property bool isChecking: false
   property string lastCheckTime: ""
+  property var tempPackageList: [] // Temporary storage before repo detection
 
   Component.onCompleted: {
     Logger.i("YayUpdater", "Plugin initialized");
@@ -53,7 +54,10 @@ Item {
         if (output === "") {
           root.updateCount = 0;
           root.packageList = [];
+          root.tempPackageList = [];
           Logger.i("YayUpdater", "No updates available");
+          root.lastCheckTime = new Date().toLocaleTimeString();
+          root.isChecking = false;
         } else {
           const lines = output.split('\n').filter(line => line.trim() !== "");
           const packages = lines.map(line => {
@@ -72,10 +76,88 @@ Item {
           // Sort packages alphabetically by name
           packages.sort((a, b) => a.name.localeCompare(b.name));
 
-          root.packageList = packages;
-          root.updateCount = root.packageList.length;
-          Logger.i("YayUpdater", `Found ${root.updateCount} updates (repos + AUR)`);
+          root.tempPackageList = packages;
+          root.updateCount = packages.length;
+          Logger.i("YayUpdater", `Found ${root.updateCount} updates, detecting repositories...`);
+          
+          // Trigger repository detection
+          detectRepositories();
         }
+      }
+    }
+
+    onExited: function (exitCode, exitStatus) {
+      if (exitCode !== 0) {
+        Logger.e("YayUpdater", `Check updates failed with exit code ${exitCode}`);
+        root.isChecking = false;
+      }
+    }
+  }
+
+  //
+  // ------ Detect package repositories ------
+  //
+  function detectRepositories() {
+    if (root.tempPackageList.length === 0) {
+      root.packageList = [];
+      root.lastCheckTime = new Date().toLocaleTimeString();
+      root.isChecking = false;
+      return;
+    }
+
+    const packageNames = root.tempPackageList.map(pkg => pkg.name).join(" ");
+    repoDetectProc.command = ["sh", "-c", `yay -Si ${packageNames} 2>/dev/null`];
+    repoDetectProc.running = true;
+  }
+
+  Process {
+    id: repoDetectProc
+
+    stdout: StdioCollector {
+      onStreamFinished: {
+        const output = text.trim();
+        const repoMap = {}; // Map package name to repository
+
+        if (output !== "") {
+          // Parse yay -Si output
+          // Format: Multiple blocks separated by blank lines
+          // Each block has: Repository : <repo> ... Name : <package>
+          const blocks = output.split(/\n\n+/);
+          
+          blocks.forEach(block => {
+            const lines = block.split('\n');
+            let currentRepo = "unknown";
+            let currentName = "";
+
+            lines.forEach(line => {
+              const repoMatch = line.match(/^Repository\s*:\s*(.+)$/i);
+              const nameMatch = line.match(/^Name\s*:\s*(.+)$/i);
+
+              if (repoMatch) {
+                currentRepo = repoMatch[1].trim();
+              } else if (nameMatch) {
+                currentName = nameMatch[1].trim();
+              }
+            });
+
+            if (currentName) {
+              repoMap[currentName] = currentRepo;
+            }
+          });
+        }
+
+        // Update packages with repository information
+        const updatedPackages = root.tempPackageList.map(pkg => {
+          return {
+            ...pkg,
+            repository: repoMap[pkg.name] || "unknown"
+          };
+        });
+
+        root.packageList = updatedPackages;
+        
+        const repoCount = Object.keys(repoMap).length;
+        Logger.i("YayUpdater", `Repository detection complete: ${repoCount}/${root.tempPackageList.length} packages identified`);
         
         root.lastCheckTime = new Date().toLocaleTimeString();
         root.isChecking = false;
@@ -84,7 +166,10 @@ Item {
 
     onExited: function (exitCode, exitStatus) {
       if (exitCode !== 0) {
-        Logger.e("YayUpdater", `Check updates failed with exit code ${exitCode}`);
+        Logger.w("YayUpdater", `Repository detection failed with exit code ${exitCode}, using unknown`);
+        // Fallback: use packages without repository info
+        root.packageList = root.tempPackageList;
+        root.lastCheckTime = new Date().toLocaleTimeString();
         root.isChecking = false;
       }
     }
