@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "plugins": [
+    {
+      "id": "yay-updater",
+      "name": "Yay Updater",
+      "version": "1.0.0",
+      "official": false,
+      "author": "NekoShinobi",
+      "description": "Check for Arch Linux updates via yay every 4 hours and provides visual update count on the bar. Click to view package list and update.",
+      "repository": "https://github.com/NekoShinobi/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "System"
+      ],
+      "lastUpdated": "2026-02-27T00:00:00Z"
+    }
+  ]
+}
