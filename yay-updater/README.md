@@ -46,7 +46,11 @@ Open the plugin settings to customize:
 ### Bar Widget
 - Shows the number of available updates
 - Displays a spinning loader icon while checking
-- Click to open the panel with package details
+- **Left click:** Open the panel with package details
+- **Right click:** Open context menu with options:
+  - **Check Now:** Manually trigger an update check
+  - **Update System:** Run system update (only available when updates exist)
+  - **Settings:** Open plugin settings to customize icon, interval, and terminal
 
 ### Panel
 - View the complete list of packages with current and new versions

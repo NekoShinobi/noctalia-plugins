@@ -95,10 +95,15 @@ Item {
     anchors.fill: parent
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-    onClicked: {
-      if (pluginApi) {
-        pluginApi.openPanel(root.screen, root);
+    onClicked: function (mouse) {
+      if (mouse.button === Qt.LeftButton) {
+        if (pluginApi) {
+          pluginApi.openPanel(root.screen, root);
+        }
+      } else if (mouse.button === Qt.RightButton) {
+        PanelService.showContextMenu(contextMenu, root, screen);
       }
     }
 
@@ -128,9 +133,50 @@ Item {
         lines.push(`Last checked: ${lastCheck}`);
       }
       
-      lines.push("\nClick to view details");
+      lines.push("\nLeft click: View details");
+      lines.push("Right click: Menu");
 
       TooltipService.show(lines.join("\n"));
+    }
+  }
+
+  NPopupContextMenu {
+    id: contextMenu
+
+    model: [
+      {
+        "label": "Check Now",
+        "action": "refresh",
+        "icon": "refresh"
+      },
+      {
+        "label": "Update System",
+        "action": "update",
+        "icon": "download",
+        "enabled": root.updateCount > 0
+      },
+      {
+        "label": "Settings",
+        "action": "settings",
+        "icon": "settings"
+      },
+    ]
+
+    onTriggered: function (action) {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
+      
+      if (action === "refresh") {
+        if (root.pluginApi?.mainInstance) {
+          root.pluginApi.mainInstance.startCheckUpdates();
+        }
+      } else if (action === "update") {
+        if (root.pluginApi?.mainInstance && root.updateCount > 0) {
+          root.pluginApi.mainInstance.runSystemUpdate();
+        }
+      } else if (action === "settings") {
+        BarService.openPluginSettings(root.screen, pluginApi.manifest);
+      }
     }
   }
 }
