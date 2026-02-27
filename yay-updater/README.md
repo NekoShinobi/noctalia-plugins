@@ -14,6 +14,7 @@ A Noctalia plugin that checks for Arch Linux updates using yay and displays them
 ## Requirements
 
 - **yay**: The AUR helper must be installed on your system
+- **pacman-contrib**: Provides `checkupdates` command for syncing official repos (usually pre-installed)
 - **Terminal emulator**: A terminal emulator like `foot`, `kitty`, `alacritty`, or `konsole`
 
 ## Installation
@@ -53,9 +54,8 @@ Open the plugin settings to customize:
   - **Settings:** Open plugin settings to customize icon, interval, and terminal
 
 ### Panel
-- View the complete list of packages with current and new versions
-- Repository badges show package source (core, extra, community, aur, etc.)
-- AUR packages are highlighted with a different color
+- View the complete list of packages sorted alphabetically
+- Shows current and new version for each package
 - Click "Update Now" to run `yay -Syu` in your configured terminal
 - Click "Refresh" to manually check for updates
 
@@ -78,14 +78,14 @@ qs -c noctalia-shell ipc call plugin:yay-updater update
 
 ## Technical Details
 
-- Syncs package database with `yay -Sy` before checking
-- Runs `yay -Qu` to get all available updates (official repos + AUR)
-- Queries each package to determine its repository (core, extra, community, multilib, aur, etc.)
-- Parses package names, repository info, and version information
+- Runs `checkupdates` to sync and check official repository updates (no sudo required)
+- Runs `yay -Qua` to check AUR package updates
+- Sorts packages alphabetically for easy browsing
+- Parses package names and version information
 - Opens your configured terminal with `yay -Syu` for system updates
 - Automatically refreshes the package list after updates complete
 
-**Note:** The plugin syncs the package database and queries repository information during each check, which ensures accurate results but may take a few seconds depending on your mirror speed and number of updates.
+**Note:** The plugin uses `checkupdates` which syncs to a temporary database copy, so you get accurate results without requiring sudo or system-wide database sync.
 
 ## License
 

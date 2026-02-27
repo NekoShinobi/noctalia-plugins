@@ -197,6 +197,7 @@ Item {
                 spacing: Style.marginS
 
                 Rectangle {
+                  visible: modelData.repository !== "unknown"
                   Layout.preferredWidth: repoText.implicitWidth + Style.marginS * 2
                   Layout.preferredHeight: repoText.implicitHeight + 4
                   color: modelData.repository === "aur" ? Color.mSecondary : Color.mPrimary

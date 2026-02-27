@@ -9,10 +9,7 @@ This is a personal collection of custom plugins for Noctalia Shell. These plugin
 ## Available Plugins
 
 ### Yay Updater
-**Version:** 1.3.1
-**Description:** Check for Arch Linux updates via yay every 4 hours and provides visual update count on the bar. Click to view package list and update.
-
-**Features:**
+**Version:** 1.3.2  
 - Automatic update checks every 4 hours (configurable 1-24 hours)
 - Visual update count on bar widget
 - Detailed package list with version information

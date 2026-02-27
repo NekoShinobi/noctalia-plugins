@@ -44,18 +44,7 @@ Item {
 
   Process {
     id: checkUpdatesProc
-    command: ["sh", "-c", `
-      yay -Sy --quiet >/dev/null 2>&1
-      yay -Qu 2>/dev/null | while IFS= read -r line; do
-        pkg=$(echo "$line" | awk '{print $1}')
-        if pacman -Si "$pkg" >/dev/null 2>&1; then
-          repo=$(pacman -Si "$pkg" 2>/dev/null | awk '/^Repository/{print $3}')
-          echo "$repo/$line"
-        else
-          echo "aur/$line"
-        fi
-      done
-    `]
+    command: ["sh", "-c", "(checkupdates 2>/dev/null; yay -Qua 2>/dev/null)"]
 
     stdout: StdioCollector {
       onStreamFinished: {
@@ -69,13 +58,12 @@ Item {
           const lines = output.split('\n').filter(line => line.trim() !== "");
           const packages = lines.map(line => {
             const parts = line.split(/\s+/);
-            const fullName = parts[0] || "";
-            const repoMatch = fullName.match(/^([^\/]+)\/(.*)/);
-
+            const name = parts[0] || "";
+            
             return {
-              repository: repoMatch ? repoMatch[1] : "unknown",
-              name: repoMatch ? repoMatch[2] : fullName,
-              fullName: fullName,
+              repository: "unknown",
+              name: name,
+              fullName: name,
               currentVersion: parts[1] || "",
               newVersion: parts[3] || parts[2] || ""
             };
@@ -87,8 +75,6 @@ Item {
           root.packageList = packages;
           root.updateCount = root.packageList.length;
           Logger.i("YayUpdater", `Found ${root.updateCount} updates (repos + AUR)`);
-        }
-
         root.lastCheckTime = new Date().toLocaleTimeString();
         root.isChecking = false;
       }
