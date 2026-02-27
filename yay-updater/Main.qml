@@ -75,6 +75,8 @@ Item {
           root.packageList = packages;
           root.updateCount = root.packageList.length;
           Logger.i("YayUpdater", `Found ${root.updateCount} updates (repos + AUR)`);
+        }
+        
         root.lastCheckTime = new Date().toLocaleTimeString();
         root.isChecking = false;
       }
