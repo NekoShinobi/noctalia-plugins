@@ -88,7 +88,7 @@ Item {
             spacing: Style.marginM
 
             NIcon {
-              icon: root.isChecking ? "loader" : (root.updateCount > 0 ? "alert-circle" : "check-circle")
+              icon: root.isChecking ? "loader" : (root.updateCount > 0 ? "alert-circle" : "check")
               pointSize: Style.fontSizeXL * Style.uiScaleRatio
               color: root.updateCount > 0 ? Color.mPrimary : Color.mOnSurfaceVariant
               Layout.alignment: Qt.AlignVCenter
@@ -262,7 +262,7 @@ Item {
 
           NIcon {
             Layout.alignment: Qt.AlignHCenter
-            icon: "check-circle"
+            icon: "check"
             pointSize: Style.fontSizeXXL * 2 * Style.uiScaleRatio
             color: Color.mOnSurfaceVariant
           }
