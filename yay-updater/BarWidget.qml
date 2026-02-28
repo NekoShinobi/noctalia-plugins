@@ -70,6 +70,7 @@ Item {
           Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
           icon: root.isChecking ? "loader" : root.iconName
           color: root.hovered ? Color.mOnHover : (root.updateCount > 0 ? Color.mPrimary : Color.mOnSurface)
+          rotation: root.isChecking ? rotation : 0
 
           RotationAnimation on rotation {
             running: root.isChecking

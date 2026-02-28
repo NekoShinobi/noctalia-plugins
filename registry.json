@@ -4,7 +4,7 @@
     {
       "id": "yay-updater",
       "name": "Yay Updater",
-      "version": "1.4.1",
+      "version": "1.5.0",
       "official": false,
       "author": "NekoShinobi",
       "description": "Check for Arch Linux updates via yay every 4 hours and provides visual update count on the bar. Click to view package list and update.",
@@ -16,7 +16,7 @@
         "Panel",
         "System"
       ],
-      "lastUpdated": "2026-02-28T00:04:53Z"
+      "lastUpdated": "2026-02-28T00:17:20Z"
     }
   ]
 }

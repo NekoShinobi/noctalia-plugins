@@ -1,7 +1,7 @@
 {
   "id": "yay-updater",
   "name": "Yay Updater",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "minNoctaliaVersion": "4.0.0",
   "author": "NekoShinobi",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "defaultSettings": {
       "updateIntervalHours": 4,
       "terminalCommand": "foot -e",
-      "iconName": "software-update-available",
+      "iconName": "download",
       "hideOnZero": false,
       "autoRefreshOnOpen": true
     }

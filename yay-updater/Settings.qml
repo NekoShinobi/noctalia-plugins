@@ -14,7 +14,7 @@ ColumnLayout {
 
   property int updateIntervalHours: cfg.updateIntervalHours ?? defaults.updateIntervalHours ?? 4
   property string terminalCommand: cfg.terminalCommand ?? defaults.terminalCommand ?? "foot -e"
-  property string iconName: cfg.iconName ?? defaults.iconName ?? "software-update-available"
+  property string iconName: cfg.iconName ?? defaults.iconName ?? "download"
   property bool hideOnZero: cfg.hideOnZero ?? defaults.hideOnZero ?? false
   property bool autoRefreshOnOpen: cfg.autoRefreshOnOpen ?? defaults.autoRefreshOnOpen ?? true
 
