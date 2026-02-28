@@ -81,7 +81,7 @@ Item {
           Logger.i("YayUpdater", `Found ${root.updateCount} updates, detecting repositories...`);
           
           // Trigger repository detection
-          detectRepositories();
+          root.detectRepositories();
         }
       }
     }
@@ -149,8 +149,11 @@ Item {
         // Update packages with repository information
         const updatedPackages = root.tempPackageList.map(pkg => {
           return {
-            ...pkg,
-            repository: repoMap[pkg.name] || "unknown"
+            repository: repoMap[pkg.name] || "unknown",
+            name: pkg.name,
+            fullName: pkg.fullName,
+            currentVersion: pkg.currentVersion,
+            newVersion: pkg.newVersion
           };
         });
 

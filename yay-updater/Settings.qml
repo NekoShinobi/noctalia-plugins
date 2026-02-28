@@ -185,13 +185,13 @@ ColumnLayout {
       description: "Terminal emulator to use for running updates. Use {} as placeholder for the command."
     }
 
-    NTextField {
+    NTextInput {
       Layout.fillWidth: true
+      label: "Terminal Command"
+      placeholderText: "foot -e"
       text: root.terminalCommand
       onTextChanged: {
         root.terminalCommand = text;
-      }
-      onEditingFinished: {
         root.saveSettings();
       }
     }
