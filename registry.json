@@ -2,6 +2,24 @@
   "version": 1,
   "plugins": [
     {
+      "id": "apcupsd",
+      "name": "APC UPS Monitor",
+      "version": "1.0.0",
+      "official": false,
+      "author": "NekoShinobi",
+      "description": "Monitor APC UPS status via apcupsd. Shows battery level, load, runtime, and other vital UPS information on the bar.",
+      "repository": "https://github.com/NekoShinobi/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "System",
+        "Hardware"
+      ],
+      "lastUpdated": "2026-02-28T00:50:00Z"
+    },
+    {
       "id": "yay-updater",
       "name": "Yay Updater",
       "version": "1.5.2",

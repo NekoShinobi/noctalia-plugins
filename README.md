@@ -8,11 +8,23 @@ This is a personal collection of custom plugins for Noctalia Shell. These plugin
 
 ## Available Plugins
 
+### APC UPS Monitor
+**Version:** 1.0.0
+- Real-time UPS monitoring via apcupsd
+- Battery level, load, and runtime display
+- Color-coded status indicators (normal/warning/critical)
+- Detailed panel with comprehensive UPS information
+- Customizable update interval (1-60 seconds)
+- Configurable alert thresholds
+- Bar widget shows battery or load percentage
+
+See [apcupsd/README.md](apcupsd/README.md) for detailed documentation.
+
 ### Yay Updater
-**Version:** 1.3.6  
+**Version:** 1.5.2
 - Automatic update checks every 4 hours (configurable 1-24 hours)
 - Visual update count on bar widget
-- Detailed package list with version information
+- Detailed package list with repository detection
 - One-click system update via terminal
 - Customizable terminal emulator
 - Auto-refresh on panel open

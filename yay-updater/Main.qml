@@ -63,7 +63,7 @@ Item {
           const packages = lines.map(line => {
             const parts = line.split(/\s+/);
             const name = parts[0] || "";
-            
+
             return {
               repository: "unknown",
               name: name,
@@ -79,7 +79,7 @@ Item {
           root.tempPackageList = packages;
           root.updateCount = packages.length;
           Logger.i("YayUpdater", `Found ${root.updateCount} updates, detecting repositories...`);
-          
+
           // Trigger repository detection
           root.detectRepositories();
         }
@@ -123,7 +123,7 @@ Item {
           // Format: Multiple blocks separated by blank lines
           // Each block has: Repository : <repo> ... Name : <package>
           const blocks = output.split(/\n\n+/);
-          
+
           blocks.forEach(block => {
             const lines = block.split('\n');
             let currentRepo = "unknown";
@@ -158,10 +158,10 @@ Item {
         });
 
         root.packageList = updatedPackages;
-        
+
         const repoCount = Object.keys(repoMap).length;
         Logger.i("YayUpdater", `Repository detection complete: ${repoCount}/${root.tempPackageList.length} packages identified`);
-        
+
         root.lastCheckTime = new Date().toLocaleTimeString();
         root.isChecking = false;
       }
