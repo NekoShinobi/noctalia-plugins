@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
@@ -47,7 +48,7 @@ Rectangle {
       NIcon {
         icon: root.isBatteryBackup ? "battery-exclamation" : "battery-charging"
         pointSize: Style.fontSizeXL * Style.uiScaleRatio
-        color: root.isBatteryBackup ? Color.mWarning : Color.mPrimary
+        color: root.isBatteryBackup ? Color.mSecondary : Color.mPrimary
       }
 
       ColumnLayout {
@@ -173,7 +174,7 @@ Rectangle {
             height: parent.height
             color: {
               if (root.batteryCharge <= 20) return Color.mError;
-              if (root.batteryCharge <= 50) return Color.mWarning;
+              if (root.batteryCharge <= 50) return Color.mSecondary;
               return Color.mPrimary;
             }
             radius: Style.radiusS

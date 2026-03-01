@@ -49,7 +49,7 @@ Item {
     if (!isAvailable) return Color.mOnSurfaceVariant;
     if (isBatteryBackup) {
       if (batteryCharge <= criticalBatteryPercent) return Color.mError;
-      if (batteryCharge <= warnBatteryPercent) return Color.mWarning;
+      if (batteryCharge <= warnBatteryPercent) return Color.mSecondary;
       return Color.mPrimary;
     }
     return Color.mOnSurface;

@@ -192,7 +192,7 @@ ColumnLayout {
 
       NText {
         text: root.warnBatteryPercent.toString() + "%"
-        color: Color.mWarning
+        color: Color.mSecondary
       }
     }
 
