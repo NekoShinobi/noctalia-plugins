@@ -34,13 +34,19 @@ Item {
   readonly property string status: root.pluginApi?.mainInstance?.status || "UNKNOWN"
   readonly property real batteryCharge: root.pluginApi?.mainInstance?.batteryCharge || 0.0
   readonly property real loadPercent: root.pluginApi?.mainInstance?.loadPercent || 0.0
+  readonly property real loadWatts: root.pluginApi?.mainInstance?.loadWatts || 0.0
+  readonly property string lineVoltage: root.pluginApi?.mainInstance?.lineVoltage || "N/A"
   readonly property bool isOnline: root.pluginApi?.mainInstance?.isOnline || false
   readonly property bool isBatteryBackup: root.pluginApi?.mainInstance?.isBatteryBackup || false
 
   // Display properties
   readonly property string displayText: {
     if (!isAvailable) return "N/A";
-    if (showLoad) return Math.round(loadPercent) + "%";
+    if (showLoad) {
+      const percent = Math.round(loadPercent) + "%";
+      const watts = Math.round(loadWatts);
+      return watts > 0 ? percent + " (" + watts + "W)" : percent;
+    }
     if (showPercentage) return Math.round(batteryCharge) + "%";
     return "";
   }
@@ -149,19 +155,9 @@ Item {
         lines.push("UPS Unavailable");
         lines.push("Check that apcupsd is installed and running");
       } else {
-        lines.push(`Status: ${root.status}`);
-        lines.push(`Battery: ${Math.round(root.batteryCharge)}%`);
+        lines.push(`Charge: ${Math.round(root.batteryCharge)}%`);
+        lines.push(`Voltage: ${root.lineVoltage}`);
         lines.push(`Load: ${Math.round(root.loadPercent)}%`);
-        
-        const timeLeft = root.pluginApi?.mainInstance?.timeLeft;
-        if (timeLeft && timeLeft !== "N/A") {
-          lines.push(`Runtime: ${timeLeft}`);
-        }
-
-        const lastUpdate = root.pluginApi?.mainInstance?.lastUpdateTime;
-        if (lastUpdate) {
-          lines.push(`\nLast update: ${lastUpdate}`);
-        }
       }
 
       lines.push("\nLeft click: View details");
@@ -181,7 +177,7 @@ Item {
         "icon": "refresh"
       },
       {
-        "label": "Settings",
+        "label": "Widget Settings",
         "action": "settings",
         "icon": "settings"
       },

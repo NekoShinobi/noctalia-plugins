@@ -157,7 +157,7 @@ Item {
         "enabled": root.updateCount > 0
       },
       {
-        "label": "Settings",
+        "label": "Widget Settings",
         "action": "settings",
         "icon": "settings"
       },

@@ -1,7 +1,7 @@
 {
   "id": "apcupsd",
   "name": "APC UPS Monitor",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "minNoctaliaVersion": "4.0.0",
   "author": "NekoShinobi",
   "license": "MIT",

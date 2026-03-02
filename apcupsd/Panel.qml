@@ -166,7 +166,7 @@ Rectangle {
         Rectangle {
           Layout.fillWidth: true
           height: 24
-          color: Settings.data.colorSchemes.darkMode ? Color.mSurfaceContainerLow : Color.mSurfaceContainerHigh
+          color: Color.mSurfaceVariant
           radius: Style.radiusS
 
           Rectangle {
@@ -233,7 +233,7 @@ Rectangle {
         Rectangle {
           Layout.fillWidth: true
           height: 24
-          color: Settings.data.colorSchemes.darkMode ? Color.mSurfaceContainerLow : Color.mSurfaceContainerHigh
+          color: Color.mSurfaceVariant
           radius: Style.radiusS
 
           Rectangle {

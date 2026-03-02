@@ -16,6 +16,7 @@ Item {
   property string status: "UNKNOWN"
   property real batteryCharge: 0.0
   property real loadPercent: 0.0
+  property real loadWatts: 0.0
   property string timeLeft: "N/A"
   property string lineVoltage: "N/A"
   property string model: "Unknown"
@@ -112,6 +113,11 @@ Item {
     // Parse load percent
     const loadMatch = (data['LOADPCT'] || '0').match(/([\d.]+)/);
     root.loadPercent = loadMatch ? parseFloat(loadMatch[1]) : 0.0;
+
+    // Parse load watts (NOMPOWER or calculated from LOADPCT)
+    const wattsMatch = (data['NOMPOWER'] || '0').match(/([\d.]+)/);
+    const nomPower = wattsMatch ? parseFloat(wattsMatch[1]) : 0.0;
+    root.loadWatts = nomPower > 0 ? (root.loadPercent / 100) * nomPower : 0.0;
 
     // Time left
     root.timeLeft = data['TIMELEFT'] || 'N/A';
